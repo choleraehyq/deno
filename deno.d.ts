@@ -11,4 +11,5 @@ declare module "deno" {
     data: Uint8Array,
     perm: number
   ): void;
+  function tempDirSync(dir: string, prefix: string): string;
 }

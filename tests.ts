@@ -7,7 +7,7 @@
 // serving the deno project directory. Try this:
 //   http-server -p 4545 --cors .
 import { test, assert, assertEqual } from "./testing/testing.ts";
-import { readFileSync, writeFileSync } from "deno";
+import { readFileSync, writeFileSync, tempDirSync } from "deno";
 
 test(async function tests_test() {
   assert(true);
@@ -35,10 +35,10 @@ test(async function tests_readFileSync() {
 test(async function tests_writeFileSync() {
   const enc = new TextEncoder();
   const data = enc.encode("Hello");
-  // TODO need ability to get tmp dir.
-  const fn = "/tmp/test.txt";
-  writeFileSync("/tmp/test.txt", data, 0o666);
-  const dataRead = readFileSync("/tmp/test.txt");
+  const tempDir = tempDirSync("/tmp", "denotest");
+  const fn = tempDir.concat("/test.txt");
+  writeFileSync(fn, data, 0o666);
+  const dataRead = readFileSync(fn);
   const dec = new TextDecoder("utf-8");
   const actual = dec.decode(dataRead);
   assertEqual("Hello", actual);
